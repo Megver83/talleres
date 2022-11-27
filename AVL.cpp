@@ -16,9 +16,15 @@ class Month {
 
         int calculateWeight(string month_name) {
             int size = 0;
+            int index;
             for(char letter : month_name) {
-                letter = tolower(letter); // La convierte en minúscula, por si acaso
-                size += getIndexOfChar(letter) + 1;
+                // La convierte en minúscula, por si acaso
+                letter = tolower(letter);
+                index = getIndexOfChar(letter);
+
+                // Se ignoran caracteres que no estén en el abecedario inglés
+                if(index > -1)
+                    size += index + 1;
             }
             return size;
         }
@@ -27,7 +33,7 @@ class Month {
             for(int i = 0; i < 26; i++) {
                 if(c == abc[i]) return i;
             }
-            return 0;
+            return -1;
         }
 };
 
