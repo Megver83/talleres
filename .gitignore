@@ -1,5 +1,4 @@
-!*.cpp
-!*.c
-!*.h
+.depend
 *.o
 *.bak
+out/
