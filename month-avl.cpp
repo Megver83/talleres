@@ -1,41 +1,4 @@
-#include <iostream>
-using namespace std;
-
-class Month {
-    public:
-        int weight;
-        string name;
-
-        Month(string month_name) {
-            name = month_name;
-            weight = calculateWeight(month_name);
-        }
-
-    private:
-        string abc = "abcdefghijklmnopqrstuvwxyz";
-
-        int calculateWeight(string month_name) {
-            int size = 0;
-            int index;
-            for(char letter : month_name) {
-                // La convierte en minúscula, por si acaso
-                letter = tolower(letter);
-                index = getIndexOfChar(letter);
-
-                // Se ignoran caracteres que no estén en el abecedario inglés
-                if(index > -1)
-                    size += index + 1;
-            }
-            return size;
-        }
-
-        int getIndexOfChar(char c) {
-            for(int i = 0; i < 26; i++) {
-                if(c == abc[i]) return i;
-            }
-            return -1;
-        }
-};
+#include "avl.h"
 
 int main() {
     // Crea los meses del año
@@ -52,8 +15,38 @@ int main() {
     Month noviembre("Noviembre");
     Month diciembre("Diciembre");
 
-    Month meses[12] = {enero, febrero, marzo, abril, mayo, junio, julio, agosto, septiembre, octubre, noviembre, diciembre};
-    for(Month mes : meses) cout << mes.name << " " << mes.weight << endl;
+    // Crea la raíz del árbol
+    Month* root = &enero;
+
+    // Hace un array con el resto de meses para insertarlos con un for-each
+    Month* meses[11] = {
+        &febrero, &marzo, &abril, &mayo, &junio, &julio,
+        &agosto, &septiembre, &octubre, &noviembre, &diciembre
+    };
+
+    // Hace la magia
+    for(Month* m : meses) {
+        cout << "Insertando " << m->name << " " << m->weight << endl;
+
+        // Rebaja el peso en 1 mientras se encuentren coincidencias
+        while(find(root, m->weight))
+            m->lowerWeight();
+
+        // Inserta el nodo
+        root = insert(m, root);
+        cout << endl;
+    }
+
+    // Imprime!
+    cout << "In-order: ";
+    inorder(root);
+    cout << endl;
+    cout << "Post-order: ";
+    postorder(root);
+    cout << endl;
+    cout << "Pre-order: ";
+    preorder(root);
+    cout << endl;
 
     return 0;
 }
